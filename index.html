@@ -4,29 +4,586 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Finance Tracker</title>
-    <link rel="stylesheet" href="styles.css">
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="preconnect" href="fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
-    
+
     <div class="container">
-        <!--This is where the aside section starts-->
-        <aside>
-            <div class="Top">
+        
+            <!-- aside section starts-->
+         <aside>
+
+            <div class="top">
+
                 <div class="logo">
-                    <h2>Student <span class="highlight">Finance</span> Tracker</h2>
+                    <h2>Student <span class="danger">Finance</span> Tracker</h2>
+                </div>
+                <div>
+                <span class="material-symbols-outlined">close</span>
                 </div>
             </div>
+            <!--end of top section-->
+
+            <div class="sidebar">
+                <div>
+                    <a href="#dashboard" class="active">
+                        <span class="material-symbols-outlined">grid_view</span>
+                        <h3>Dashboard</h3>
+                    </a>
+                </div>
             
-        </aside>
-        <!--aside section ends here-->
+                <div>
+                    <a href="#transactions">
+                        <span class="material-symbols-outlined">receipt_long</span>
+                        <h3>Transactions</h3>
+                    </a>
+                </div>
+                <div>
+                    <a href="#">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        <h3>Add Expense</h3>
+                    </a>
+                </div>
+                <div>
+                    <a href="#settings">
+                        <span class="material-symbols-outlined">settings</span>
+                        <h3>Settings</h3>
+                    </a>
+                </div>
+                <div>
+                    <a href="#About" >
+                        <span class="material-symbols-outlined">info</span>
+                        <h3>About</h3>
+                    </a>
+            </div>
 
-        <!--main section starts here-->
+         
+         <!-- aside section ends-->
+        </aside> 
+     
+
+    <!-- main section starts-->
         <main>
-            <h1>Welcome to the student finance tracker</h1>
-        </main>
-        <!--main section ends here--> 
-    </div>
 
+            <!--Top Section of the Dashboard-->
+            <div class="main-top">
+                <div>
+                    <h1>Dashboard</h1>
+                    <p>Here's your financial overview.</p>
+                </div>
+            
+
+                <div class="profile">
+                    <span class="material-symbols-outlined">account_circle</span>
+                    <div>
+                        <h3>Student</h3>
+                        <small>Finance Tracker</small>
+                    </div>    
+                </div>
+            </div>
+
+            <!--Dashboard Section-->
+            <section id="dashboard" class="dashboard">
+
+                <!--Summary of Cards -->
+                <div class="summary-cards">
+
+
+                    <div class="card">
+                        <div class="card-icon">
+                            <span class="material-symbols-outlined">
+                                payments
+                            </span>
+                        </div>
+
+                        <div class="card-info">
+                            <h3>Total Expenses</h3>
+                            <h2>$300</h2>
+                            <p>This month</p>
+                        </div>
+                    </div>
+
+
+                    <!--Number of transactions-->
+                    <div class="card">
+                        <div class="card-icon">
+                            <span class="material-symbols-outlined">
+                                receipt_long
+                            </span>
+                        </div>
+
+                        <div class="card-info">
+                            <h3>Transactions</h3>
+                            <h2>24</h2>
+                            <p>Recorded expenses</p>
+                        </div>
+                    </div>
+
+
+                    <!--Top Categories-->
+                    <div class="card">
+                        <div class="card-icon">
+                            <span class="material-symbols-outlined">
+                                category
+                            </span>
+                        </div>
+
+                        <div class="card-info">
+                            <h3>Top Categories</h3>
+                            <h2>Food</h2>
+                            <p>$100</p>
+                        </div>
+                    
+                    </div>
+
+
+                    <!--Current Budget-->
+                    <div class="card">
+                        <div class="card-icon">
+                            <span class="material-symbol-outlined">
+                                stacks
+                            </span>
+                        </div>
+
+                        <div class="card-info">
+                            <h3>Balanced Budget</h3>
+                            <h2>$400</h2>
+                            <p>Monthly target</p>
+                        </div>
+                    </div>
+                </div>    
+                <!--Middle section of the Dashboard-->
+
+                <div class="dashboard-grid">
+
+                    <!--Spending overview-->
+                    <div class="panel spending-overview">
+
+                        <div class="panel-header">
+                            <div>
+                                <h2>Spending Overview</h2>
+                                <p>Expenditure during the last 7 days</p>
+                            </div>
+
+                            <button class="icon-button" aria-label="More options">
+                                <span class="material-symbols-outlined">
+                                    more_vert
+                                </span>
+                            </button>
+                        </div>
+
+
+                        <!---Graphical representation with a chart-->
+                        <div class="chart">
+                            <div class="chart-item">
+                                <small>$50</small>
+                                <div class="bar-container">
+                                    <div class="bar" style="height: 40%;"></div>
+                                </div>
+                                <span>Mon</span>
+                            </div>
+                    
+                            <div class="chart-item">
+                                <small>$100</small>
+                                <div class="bar-container">
+                                    <div class="bar" style="height: 65%;"></div>
+                                </div>
+                                <span>Tues</span>
+                            </div>
+
+                            <div class="chart-item">
+                                <small>$170</small>
+                                <div class="bar-container">
+                                    <div class="bar" style="height: 30%;"></div>
+                                </div>
+                                <span>Weds</span>
+                            </div>
+
+                            <div class="chart-item">
+                                <small>$90</small>
+                                <div class="bar-container">
+                                    <div class="bar" style="height: 80%;"></div>
+                                </div>
+                                <span>Thurs</span>
+                            </div>
+
+                            <div class="chart-item">
+                                <small>$150</small>
+                                <div class="bar-container">
+                                    <div class="bar" style="height: 55%;"></div>
+                                </div>
+                                <span>Fri</span>
+                            </div>
+
+                            <div class="chart-item">
+                                <small>$300</small>
+                                <div class="bar-container">
+                                    <div class="bar" style="height: 90%;"></div>
+                                </div>
+                                <span>Sat</span>
+                            </div>
+
+                            <div class="chart-item">
+                                <small>$30</small>
+                                <div class="bar-container">
+                                    <div class="bar" style="height: 45%;"></div>
+                                </div>
+                                <span>Sun</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!--Budget Target-->
+                <div class="panel budget-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>Monthly Budget</h2>
+                            <p>Targeted spending</p>
+                        </div>
+
+                        <span class="material-symbols-outlined">
+                            savings
+                        </span>
+                    </div>
+
+                    <div class="budget-content">
+                        <div class="budget-circle">
+                            <div>
+                                <strong>82%</strong>
+                                <span>Used</span>
+                            </div>
+                        </div>
+                        
+                        <div class="budget-details">
+                            <div>
+                                <span>Budget</span>
+                                <strong>$1000</strong>
+                            </div>
+
+                            <div>
+                                <span>Spent</span>
+                                <strong>$800</strong>
+                            </div>
+
+                            <div>
+
+                            <div>
+                                    <span>Left</span>
+                                </div>
+                            </div>
+                        </div>    
+                        <p class="budget-status" aria-live="polite">You have $200 left this month</p>
+                        
+                    </div>
+                </div>
+
+                
+                      
+            </section>
+
+            <!--Transactions section-->
+            <section id="transactions" class="page-section">
+
+            
+                <div class="section-header">
+                    <div>
+                        <h1>Transactions</h1>
+                        <p>Manage all your expenses</p>
+                    </div>
+
+                    <a href="#add-expense" class="primary-button">
+                        <span class="material-symbols-outlined">add</span>
+                        Add Expense
+                    </a>
+                </div>
+
+                <div class="filters">
+
+                    <div class="search-box">
+                        <span class="material-outlined">search</span>
+                        <input 
+                            type="search"
+                            id="search"
+                            placeholder="search transactions"
+                            aria-label="search transactions">
+                    </div>
+
+                    <select id="category-filter" aria-label="Filter by category">
+                        <option value="all">All Categories</option>
+                        <option value="food">Food</option>
+                        <option value="books">Books</option>
+                        <option value="transport">Transport</option>
+                        <option value="entertainment">Entertainmentzzz</option>
+                        <option value="fees">Fees</option>
+                        <option value="other">Other</option>
+                    </select>
+
+                    <select id="sort-by" aria-label="Sort transactions">
+                        <option value="date-desc">Latest</option>
+                        <option value="date-asc">Oldest</option>
+                        <option value="amount-desc">Highest Amount</option>
+                        <option value="amount-asc">Lowest Amount</option>
+                        <option value="name-asc">Name A-Z</option>
+                    </select>
+
+                </div>
+
+                <div class="panel transactions-panel">
+                    <div class="table-container">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="transactions-body">
+                                <!--Javascript will create the elements for the table here-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+
+            <!--Add Expense Section-->
+            <section id ="add-expense" class="page selection">
+
+                <div class="section-header">
+                    <div>
+                        <h1>Add Expense</h1>
+                        <p>Record a new student expense.</p>
+                    </div>
+                </div>
+
+                <div class="form-panel">
+
+                    <form id="expense-form">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label for="description">Description</label>
+
+                                <input
+                                    type="text"
+                                    id="description"
+                                    name="description"
+                                    placeholder="e.g. Breakfast"
+                                    required
+                                >    
+                                <small id="description-error" class=""error-message></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="amount">Amount</label>
+
+                                <div class="amount-input">
+                                    <span>$</span>
+                                    <input 
+                                        type="text"
+                                        id="amount"
+                                        name="amount"
+                                        placeholder="0.00"
+                                        inputmode="decimal"
+                                        required
+                                >    
+                                </div>
+
+                                <small id="amount-error" class="error-message"></small>
+                            </div>
+
+                            <div class="form group">
+                                <label for="category">Category</label>
+                                <input
+                                    type="text"
+                                    id="category"
+                                    name="category"
+                                    placeholder="e.g. Transport"
+                                    required
+                                >
+                                <small id="category-error" class="error-message"></small>    
+                            </div>
+
+                            <div class="form group">
+                                <label for="date">Date</label>
+                                <input 
+                                    type="date"
+                                    id="date"
+                                    name="date"
+                                    required
+                                >
+                                <small id="date-error" class="error-message"></small>
+                            </div>
+
+                        </div>
+
+                        <div class="form-action">
+                            <button type="reset" class="secondary-button">
+                                Cancel
+                            </button>
+
+                            <button type="submit" class="primary-button">
+                                <span classs="material-symbols-outlined">save</span>
+                                Save 
+                            </button>
+                        </div>
+                    
+                    </form>
+
+                </div>
+            </section>
+
+            <!--Settings Section-->
+            <section id="setting" class="page-section">
+                <div class="section-header">
+                    <div>
+                        <h1>Settings</h1>
+                        <p>Customoize your student finance tracker</p>
+                    </div>
+                </div>
+
+                <div class="settings-grid">
+
+                    <div class="settings-card">
+                        <div class="setting-icons">
+                            <span class="material-symbols-outlined">
+                                currency_exchange
+                            </span>
+                        </div>
+
+                        <div>
+                            <h2>Currency</h2>
+                            <p>Choose your preferred currency</p>
+                        </div>
+
+                        <select id="base-currency">
+                            <option value="USD">US Dollar (USD)</option>
+                            <option value="EUR">Euro (EUR)</option>
+                            <option value="CFA">Central African Franc</option>
+                        </select>
+                    </div>
+
+                    <div class="panel settings-card">
+                        <div class="settings-icon">
+                            <span class="material-symbols-outlined">flags</span>
+                        </div>
+
+                        <div>
+                            <h2>Monthly Target</h2>
+                            <p>Set your max monthly spending</p>
+                        </div>
+
+                        <input 
+                            type="number"
+                            id="monthly-target"
+                            placeholder="300000"
+                            min="0"
+                        >
+                    </div>
+
+                    <div class="panel setting-cards">
+                        <div class="settings-icon">
+                            <span class="material-symbols-outlined">database</span>
+                        </div>
+
+                        <div>
+                            <h2>Data</h2>
+                            <p>Export or import your transactions here.</p>
+                        </div>
+
+                        <div class="settings-actions">
+                            <button class="secondary-button" id="export-data">
+                                <span class="material-symbols-outlined">download</span>
+                                Export
+                            </button>
+
+                            <label for="import-data" class="secondary-button">
+                                <span class="material-symbols-outlined">upload</span>
+                                Import
+                            </label>
+
+                            <input 
+                                type="file"
+                                id="import-data"
+                                accept=".json"
+                                hidden
+                            >
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!--The About section-->
+            <section id="about" class="page-section">
+
+                <div class="section-header">
+                    <div>
+                        <h1>About</h1>
+                    </div>
+                </div>
+
+                <div class="about-panel">
+                    <span class="material-symbols-outlined">
+                        account_balance_wallet
+                    </span>
+
+                    <h2>Student Finance tracker</h2>
+
+                    <p>
+                        Student Finance Tracker is a simple web application designed to help student record, monitor and be aware of their financial spending daily
+                    </p>
+
+                    <div class="about-details">
+
+                        <div>
+                            <span>Built with HTML, CSS and JAvaScript by BOYO DAVID for ALU</span>
+                        </div>
+
+                        <div>
+                            <span>It operates on mobile, tablet, laptops and even desktops</span>
+                        </div>
+
+                        <div>
+                            <span>Your data is stored locally on your browser</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+
+
+
+
+
+        
+
+         
+        </main>
+        <!-- main section ends-->
+
+
+    
+    </div> 
+     
+    
 </body>
 </html>
