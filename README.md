@@ -1,8 +1,7 @@
 # Student Finance Tracker
 
 A responsive web application developed to help students record, organize, search, and analyze their daily expenses.
-Live URL: http://127.0.0.1:5500/index.html
-
+Live URL: https://dboyo-lgtm.github.io/student-finance-tracker/
 ## 1. Project Overview
 
 The Student Finance Tracker allows students to monitor their spending, organize transactions by category, set monthly budgets, and view financial statistics.
