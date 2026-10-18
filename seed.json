@@ -1,0 +1,94 @@
+{
+    "transactions": [
+    {
+        "id": "rec_001",
+        "description": "Lunch at cafeteria",
+        "amount": 12.5,
+        "category": "Food",
+        "date": "2026-10-10",
+        "createdAt": "2026-10-10T08:30:00.000Z",
+        "updatedAt": "2026-10-10T08:30:00.000Z"
+    },
+    {
+        "id": "rec_002",
+        "description": "Bus to campus",
+        "amount": 2,
+        "category": "Transport",
+        "date": "2026-10-11",
+        "createdAt": "2026-10-11T07:15:00.000Z",
+        "updatedAt": "2026-10-11T07:15:00.000Z"
+    },
+    {
+        "id": "rec_003",
+        "description": "Software engineering textbook",
+        "amount": 35,
+        "category": "Books",
+        "date": "2026-10-11",
+        "createdAt": "2026-10-11T10:00:00.000Z",
+        "updatedAt": "2026-10-12T09:00:00.000Z"
+    },
+    {
+        "id": "rec_004",
+        "description": "Mobile data bundle",
+        "amount": 5,
+        "category": "other",
+        "date": "2026-10-12",
+        "createdAt": "2026-10-10T09:20:00.000Z",
+        "updatedAt": "2026-10-12T09:20:00.000Z"
+    },
+    {
+        "id": "rec_005",
+        "description": "Movie with friends",
+        "amount": 8,
+        "category": "Entertainment",
+        "date": "2026-10-12",
+        "createdAt": "2026-10-12T17:45:00.000Z",
+        "updatedAt": "2026-10-12T17:45:00.000Z"
+    },
+    {
+        "id": "rec_006",
+        "description": "Semester registration fee",
+        "amount": 120,
+        "category": "fees",
+        "date": "2026-10-13",
+        "createdAt": "2026-10-13T08:20:00.000Z",
+        "updatedAt": "2026-10-13T08:20:00.000Z"
+    },
+    {
+        "id": "rec_007",
+        "description": "Groceries for the week",
+        "amount": 28.75,
+        "category": "food",
+        "date": "2026-10-14",
+        "createdAt": "2026-10-14T11:30:00.000Z",
+        "updatedAt": "2026-10-14T11:30:00.000Z"
+    },
+    {
+        "id": "rec_008",
+        "description": "Taxi after evening class",
+        "amount": 6.5,
+        "category": "Transport",
+        "date": "2026-10-15",
+        "createdAt": "2026-10-15T18:10:00.000Z",
+        "updatedAt": "2026-10-15T18:10:00.000Z"
+    },
+    {
+        "id": "rec_009",
+        "description": "Lunch and juice",
+        "amount": 9.5,
+        "category": "Books",
+        "date": "2026-10-17",
+        "createdAt": "2026-10-17T12:00:00.000Z",
+        "updatedAt": "2026-10-17T12:00:00.000Z"
+    },
+    {
+        "id": "rec_0010",
+        "description": "Lunch and juice",
+        "amount":9.5,
+        "category": "Food",
+        "date": "2026-10-17",
+        "createdAt": "2026-10-17T12:00:00.000Z",
+        "updatedAt": "2026-10-17T12:00:00.000Z"
+    }
+  ]
+}
