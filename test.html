@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Finance Tracker Test</title>
+</head>
+<body>
+    
+    <!--Display the test page heading-->
+    <h1>Student Finance Tracker Tests</h1>
+    <p id="summary" aria-live="polite">Running tests...</p>
+
+    <ol id="results"></ol>
+    
+
+    <script type="module">
+
+        import {
+            valid,
+            normalizeDescription,
+            validateImport
+        } from "./scripts/validator.js";
+        import {
+            loadData,
+            loadSettings,
+            saveData,
+            saveSettings
+        } from "./scripts/storage.js";
+
+        import {
+            compileRegex,
+            matches,
+            highlight,
+        } from "./scripts/search.js";
+
+        import { load } from "./scripts/storage.js";
+        import {
+            setFormError,
+            clearFormErrors,
+            dashboardStats,
+            filterTransactions
+        } from "./scripts/ui.js";
+
+        //Find the HTML elements used to display results.
+        const results = document.querySelector("#results");
+        const summary = document.querySelector("#summary");
+
+        let passed = 0;
+        let failed = 0;
+
+        function test(name, callback) {
+            const item = document.createElement("li");
+
+        try {
+            if(!callback()) {
+                throw new Error("Test returned false");
+            }
+
+            item.textContent = `PASS: ${name}`;
+            item.className = "pass";
+
+            passed++;
+
+        } catch (error) {
+
+            item.textContent =
+                `FAIL: ${name} - ${error.message}`;
+            
+            item.className = "fail";
+            
+            failed++;
+        }
+
+        results.appendChild(item);
+        }
+        
+        test("Reject empty description", () =>
+            !valid("", "description")
+        );
+
+        test("Accept zero amount", () =>
+            valid("0", "amount")
+        );
+
+        test("Reject negative amount", () =>
+            !valid("-5", "amount")
+        );
+        test("Reject amount with too may decimel", () =>
+            !valid("12.555", "amount")
+        );
+        test("Valid category", () =>
+            valid("Transport", "category")
+        );
+        test("Reject invalid category character", () =>
+            !valid("<script>", "category")
+        );
+        test("Valid date", () =>
+            valid("2026-10-10", "date")
+        );
+        test("Reject invalid date", () =>
+            !valid("2026-02-30", "date")
+        );
+        test("Reject adjacent duplicate words", () =>
+            !valid("Coffee coffee", "description")
+        );
+        test("Collapse repeated interior spaces", () =>
+            normalizeDescription("Bus   ticket") === "Bus ticket"
+        );
+        test("Do not trim description edges", () =>
+            !valid(normalizeDescription(" Bus ticket "), "description")
+        );
+        test("Form errors set and clear accessible invalid state", () => {
+            const fixture = document.createElement("div");
+            fixture.innerHTML = `
+                <input id="description">
+                <small id="description-error"></small>
+                <input id="amount">
+                <small id="amount-error"></small>
+                <input id="category">
+                <small id="category-error"></small>
+                <input id="date">
+                <small id="date-error"></small>
+            `;
+            document.body.appendChild(fixture);
+
+            try {
+                setFormError("description", "Invalid description.");
+                const setState =
+                    fixture.querySelector("#description").getAttribute("aria-invalid") === "true" &&
+                    fixture.querySelector("#description-error").textContent === "Invalid description.";
+
+                clearFormErrors();
+                return setState &&
+                    !fixture.querySelector("#description").hasAttribute("aria-invalid") &&
+                    fixture.querySelector("#description-error").textContent === "";
+            } finally {
+                fixture.remove();
+            }
+        });
+        test("Dashboard totals include older records but budget stays monthly", () => {
+            const now = new Date();
+            const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+            const stats = dashboardStats([
+                { date: "2025-01-01", amount: 80, category: "Books" },
+                { date: currentDate, amount: 20, category: "Food" }
+            ], { currency: "USD", target: 100 });
+
+            return stats.count === 2 &&
+                stats.total === 100 &&
+                stats.monthlyTotal === 20 &&
+                stats.topCategory === "Books";
+        });
+        test("Zero target is exceeded only when monthly spending is positive", () => {
+            const now = new Date();
+            const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+            const below = dashboardStats([], { currency: "USD", target: 0 });
+            const over = dashboardStats([
+                { date: currentDate, amount: 1, category: "Food" }
+            ], { currency: "USD", target: 0 });
+
+            return !below.overBudget && over.overBudget;
+        });
+        test("Dashboard converts legacy USD and foreign-currency transactions", () => {
+            const now = new Date();
+            const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+            const rates = { EUR: 0.92, RWF: 1400 };
+            const convertAmount = (amount, from, to, exchangeRates) => {
+                const usd = from === "EUR" ? amount / exchangeRates.EUR
+                    : from === "RWF" ? amount / exchangeRates.RWF
+                    : amount;
+                return to === "EUR" ? usd * exchangeRates.EUR
+                    : to === "RWF" ? usd * exchangeRates.RWF
+                    : usd;
+            };
+            const stats = dashboardStats([
+                { date: currentDate, amount: 100, category: "Food" },
+                { date: currentDate, amount: 46, currency: "EUR", category: "Books" }
+            ], { currency: "RWF", target: 300000, rates }, convertAmount);
+
+            return stats.total === 210000 &&
+                stats.monthlyTotal === 210000 &&
+                stats.budget === 300000;
+        });
+        test("Amount sorting uses selected-currency converted values", () => {
+            const rates = { EUR: 0.92, RWF: 1400 };
+            const convertAmount = (amount, from, to, exchangeRates) => {
+                const usd = from === "EUR" ? amount / exchangeRates.EUR
+                    : from === "RWF" ? amount / exchangeRates.RWF
+                    : amount;
+                return to === "EUR" ? usd * exchangeRates.EUR
+                    : to === "RWF" ? usd * exchangeRates.RWF
+                    : usd;
+            };
+            const transactions = [
+                { id: "usd", amount: 100, date: "2026-01-01", currency: "USD" },
+                { id: "eur", amount: 50, date: "2026-01-02", currency: "EUR" }
+            ];
+            const sorted = filterTransactions(
+                transactions,
+                { sort: "amount-desc" },
+                transaction => convertAmount(
+                    transaction.amount,
+                    transaction.currency,
+                    "RWF",
+                    rates
+                )
+            );
+
+            return sorted.data[0].id === "usd";
+        });
+        test("Compile valid regex", () =>
+            compileRegex("coffee") instanceof RegExp
+        );
+        test("Reject invalid regex", () =>
+            compileRegex("[") === null
+        );
+        test("Regex matches transaction", () =>
+            matches("Coffee at campus", compileRegex("coffee"))
+        );
+        test("Regex supports alternatives", () =>
+            !matches("Bus ticket", compileRegex("coffee|tea"))
+        );
+        test("Regex rejects unrelated text", () =>
+            !matches("Bus ticket", compileRegex("coffee"))
+        );
+        test("Highlight escape HTML", () =>
+            highlight("<script>", null) === "&lt;script&gt;"
+        );
+        const validImportRecord = (overrides = {}) => ({
+            id: "rec_1",
+            description: "Lunch",
+            amount: 12.5,
+            category: "Food",
+            date: "2026-10-10",
+            createdAt: "2026-10-10T12:00:00.000Z",
+            updatedAt: "2026-10-10T12:00:00.000Z",
+            ...overrides
+        });
+
+        test("Import accepts valid records", () =>
+            validateImport([validImportRecord()])
+        );
+        test("Import rejects string amounts", () =>
+            !validateImport([validImportRecord({ amount: "12.50" })])
+        );
+        test("Import rejects invalid timestamps", () =>
+            !validateImport([validImportRecord({ createdAt: "not a timestamp" })])
+        );
+        test("Import rejects impossible dates", () =>
+            !validateImport([validImportRecord({ date: "2026-02-30" })])
+        );
+        test("Import rejects duplicate IDs", () => {
+            return !validateImport([
+                validImportRecord(),
+                validImportRecord({
+                    description: "Books",
+                    date: "2026-10-11",
+                    id: "rec_1"
+                })
+            ]);
+        });
+
+        test("Storage rejects invalid transaction data", () =>
+            !saveData([{ id: "invalid" }])
+        );
+        test("Storage validates loaded transaction data", () => {
+            const key = "student-finance-data";
+            const previous = localStorage.getItem(key);
+
+            try {
+                localStorage.setItem(key, JSON.stringify([{ id: "invalid" }]));
+                return loadData().length === 0;
+            } finally {
+                if (previous === null) localStorage.removeItem(key);
+                else localStorage.setItem(key, previous);
+            }
+        });
+        test("Storage round-trips valid transaction data", () => {
+            const key = "student-finance-data";
+            const previous = localStorage.getItem(key);
+
+            try {
+                const records = [validImportRecord()];
+                return saveData(records) &&
+                    JSON.stringify(loadData()) === JSON.stringify(records);
+            } finally {
+                if (previous === null) localStorage.removeItem(key);
+                else localStorage.setItem(key, previous);
+            }
+        });
+        test("Storage merges saved rates with defaults", () => {
+            const key = "student-finance-settings";
+            const previous = localStorage.getItem(key);
+
+            try {
+                localStorage.setItem(key, JSON.stringify({
+                    currency: "USD",
+                    target: 1000,
+                    rates: { EUR: 0.95 }
+                }));
+                const settings = loadSettings({
+                    currency: "USD",
+                    target: 1000,
+                    monthlyBudget: 1000,
+                    categories: [],
+                    exchangeRates: { EUR: 0.92, RWF: 1400, CAD: 1.36 }
+                });
+
+                return settings.exchangeRates.EUR === 0.95 &&
+                    settings.exchangeRates.RWF === 1400 &&
+                    settings.exchangeRates.CAD === 1.36 &&
+                    settings.rates.EUR === 0.95 &&
+                    settings.rates.RWF === 1400;
+            } finally {
+                if (previous === null) localStorage.removeItem(key);
+                else localStorage.setItem(key, previous);
+            }
+        });
+        test("Storage saves valid settings", () => {
+            const key = "student-finance-settings";
+            const previous = localStorage.getItem(key);
+
+            try {
+                const settings = {
+                    currency: "USD",
+                    target: 1000,
+                    monthlyBudget: 1000,
+                    exchangeRates: { EUR: 0.92, RWF: 1400 }
+                };
+                return saveSettings(settings) &&
+                    JSON.parse(localStorage.getItem(key)).monthlyBudget === 1000;
+            } finally {
+                if (previous === null) localStorage.removeItem(key);
+                else localStorage.setItem(key, previous);
+            }
+        });
+        test("Storage rejects invalid settings", () =>
+            !saveSettings({
+                currency: "USD",
+                target: -1,
+                exchangeRates: { EUR: 0.92, RWF: 1400 }
+            })
+        );
+        test("Storage write errors return false", () => {
+            const originalSetItem = Storage.prototype.setItem;
+
+            try {
+                Storage.prototype.setItem = () => {
+                    throw new Error("Storage unavailable");
+                };
+                return !saveData([validImportRecord()]) &&
+                    !saveSettings({
+                        currency: "USD",
+                        target: 1000,
+                        exchangeRates: { EUR: 0.92, RWF: 1400 }
+                    });
+            } finally {
+                Storage.prototype.setItem = originalSetItem;
+            }
+        });
+       
+        summary.textContent = `${passed} passed, ${failed} failed.`;
+        
+        </script>
+</body>
+</html> 
